@@ -1,0 +1,9 @@
+Estruturados
+No arquivo `src/app.ts` (ou crie um novo `src/data.ts`), declare as seguintes variáveis, atribuindo valores e explicitando seus tipos:
+Uma string para o nome de um produto.
+Um number para o preço do produto.
+Um boolean indicando se o produto está em estoque.
+Um array de strings para as categorias do produto.
+Uma tupla para representar as coordenadas (latitude e longitude) de um local.
+Um Enum para os status de um pedido (Pendente, Processando, Entregue, Cancelado).
+Crie uma função que aceite um desses tipos como parâmetro e retorne uma mensagem formatada (ex: uma função que receba o nome e o preço do produto e retorne "O produto X custa R$ Y")
