@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import { isNumberObject } from "node:util/types";
 
 dotenv.config();
 
@@ -62,7 +63,7 @@ app.get('/users', (req: express.Request, res: express.Response) => {
 
 app.get('/users/:id', (req: express.Request, res: express.Response) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = Number(req.params.id);
         const user = getById(arrayUsers, id);
         if (user) {
             res.json(user);
@@ -85,7 +86,7 @@ app.post('/users', (req: express.Request, res: express.Response) => {
 
 app.delete('/users/:id', (req: express.Request, res: express.Response) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = Number(req.params.id);
         const deleted = deleteUser(arrayUsers, id);
         if (deleted) {
             res.status(200).json({ message: 'Usuário deletado com sucesso' });
@@ -99,7 +100,7 @@ app.delete('/users/:id', (req: express.Request, res: express.Response) => {
 
 app.put('/users/:id', (req: express.Request, res: express.Response) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = Number(req.params.id);
         const updatedUser = req.body;
         const user = updateUser(arrayUsers, id, updatedUser);
         if (user) {
