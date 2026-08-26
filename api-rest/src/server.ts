@@ -1,60 +1,25 @@
 import express from "express";
 import dotenv from "dotenv";
-import { isNumberObject } from "node:util/types";
+import type { IUser } from "./models/models.ts";
+import { UserController } from "./controllers/controller.ts";
+import logMiddleware from "./middlewares/logger.ts";
 
 dotenv.config();
 
 const PORT = process.env.PORT;
 const app = express();
 app.use(express.json());
+app.use(logMiddleware);
 
 
-app.listen(PORT, ()=> {
-    console.log(`Server rodando na porta ${PORT}...`)
-})
 
-interface IUser{
-    id: number;
-    name: string;
-    email?: string;
-}
 
 let arrayUsers: IUser[] = [{ id: 1, name: "Bruno", email: "bruno@email.com" }];
 
-function allUsers(listIUser: IUser[]): IUser[] {
-    return listIUser
-}
-
-function getById(listIUser: IUser[], id: number): IUser | undefined {
-    return listIUser.find(user => user.id === id);
-}
-
-function createUser(listIUser: IUser[], newUser: IUser): IUser {
-    listIUser.push(newUser);
-    return newUser;
-}
-
-function deleteUser(listIUser: IUser[], id: number): boolean {
-    const index = listIUser.findIndex(user => user.id === id);
-    if (index !== -1) {
-        listIUser.splice(index, 1);
-        return true;
-    }
-    return false;
-}
-
-function updateUser(listIUser: IUser[], id: number, updatedUser: Partial<IUser>): IUser | undefined {
-    const user = getById(listIUser, id);
-    if (user) {
-        Object.assign(user, updatedUser);
-        return user;
-    }
-    return undefined;
-}
-
 app.get('/users', (req: express.Request, res: express.Response) => {
     try{
-        res.json(allUsers(arrayUsers));
+        const listUsersController = new UserController(arrayUsers);
+        res.json(listUsersController.allUsers());
     } catch (error) {
         res.status(500).json({ error: 'Erro ao buscar usuários' });
     }
@@ -64,7 +29,8 @@ app.get('/users', (req: express.Request, res: express.Response) => {
 app.get('/users/:id', (req: express.Request, res: express.Response) => {
     try {
         const id = Number(req.params.id);
-        const user = getById(arrayUsers, id);
+        const listUserController = new UserController(arrayUsers);
+        const user = listUserController.userById(id);
         if (user) {
             res.json(user);
         } else {
@@ -78,7 +44,8 @@ app.get('/users/:id', (req: express.Request, res: express.Response) => {
 app.post('/users', (req: express.Request, res: express.Response) => {
     try {
         const newUser: IUser = req.body;
-        res.status(201).json(createUser(arrayUsers, newUser));
+        const userController = new UserController(arrayUsers);
+        res.status(201).json(userController.createUser(newUser));
     } catch (error) {
         res.status(500).json({ error: 'Erro ao criar usuário' });
     }
@@ -87,7 +54,8 @@ app.post('/users', (req: express.Request, res: express.Response) => {
 app.delete('/users/:id', (req: express.Request, res: express.Response) => {
     try {
         const id = Number(req.params.id);
-        const deleted = deleteUser(arrayUsers, id);
+        const userController = new UserController(arrayUsers);
+        const deleted = userController.deleteUser(id);
         if (deleted) {
             res.status(200).json({ message: 'Usuário deletado com sucesso' });
         } else {
@@ -102,7 +70,8 @@ app.put('/users/:id', (req: express.Request, res: express.Response) => {
     try {
         const id = Number(req.params.id);
         const updatedUser = req.body;
-        const user = updateUser(arrayUsers, id, updatedUser);
+        const userController = new UserController(arrayUsers);
+        const user = userController.updateUser(id, updatedUser);
         if (user) {
             res.json(user);
         } else {
@@ -112,3 +81,8 @@ app.put('/users/:id', (req: express.Request, res: express.Response) => {
         res.status(500).json({ error: 'Erro ao atualizar usuário' });
     }
 });
+
+
+app.listen(PORT, ()=> {
+    console.log(`Server rodando na porta ${PORT}...`)
+})

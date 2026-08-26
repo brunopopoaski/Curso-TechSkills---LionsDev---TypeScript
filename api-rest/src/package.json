@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "tslog": "^5.1.0",
+    "winston": "^3.19.0"
   }
 }
