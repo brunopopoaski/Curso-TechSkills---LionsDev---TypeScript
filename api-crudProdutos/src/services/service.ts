@@ -1,5 +1,5 @@
-import { type IProduct, type ProductInput, type ProductUpdate, products } from '../utils/types';
-import { ProductUtils } from '../utils/productUtils';
+import { type IProduct, type ProductInput, type ProductUpdate, products } from '../utils/types.ts';
+import { ProductUtils } from '../utils/productUtils.ts';
 
 export class ProductService {
   static getAllProducts(): IProduct[] {

@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express';
-import { ProductService } from '../services/service';
+import { ProductService } from '../services/service.ts';
 
 export class ProductController {
   static getAll(req: Request, res: Response): void {

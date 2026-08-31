@@ -1,4 +1,5 @@
-import { type IProduct, type ProductInput, type ProductUpdate } from './types';
+import { type IProduct, type ProductInput, type ProductUpdate } from './types.ts';
+import { products } from "./types.ts";
 
 export class ProductUtils {
   static nextId(products: IProduct[]): number {
@@ -9,6 +10,7 @@ export class ProductUtils {
     return Math.max(...products.map((product) => product.id)) + 1;
   }
 
+  
   static validateProduct(product: ProductInput | IProduct): void {
     if (!product.name || product.name.trim().length < 3) {
       throw new Error('O nome do produto deve ter pelo menos 3 caracteres.');
@@ -57,3 +59,5 @@ export class ProductUtils {
     }
   }
 }
+
+ProductUtils.nextId(products)
