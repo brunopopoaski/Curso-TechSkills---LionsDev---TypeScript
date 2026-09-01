@@ -1,5 +1,6 @@
 import { type IProduct, type ProductInput, type ProductUpdate, products } from '../utils/types.ts';
 import { ProductUtils } from '../utils/productUtils.ts';
+import { AppError } from '../errors/app.error.ts';
 
 export class ProductService {
   static getAllProducts(): IProduct[] {
@@ -7,10 +8,14 @@ export class ProductService {
   }
 
   static getProductById(id: number): IProduct {
+    if (Number.isNaN(id)) {
+      throw new AppError('ID inválido.', 400);
+    }
+
     const product = products.find((item) => item.id === id);
 
     if (!product) {
-      throw new Error('Produto não encontrado.');
+      throw new AppError('Produto não encontrado.', 404);
     }
 
     return product;
@@ -29,16 +34,20 @@ export class ProductService {
   }
 
   static updateProduct(id: number, productData: ProductUpdate): IProduct {
+    if (Number.isNaN(id)) {
+      throw new AppError('ID inválido.', 400);
+    }
+
     const productIndex = products.findIndex((item) => item.id === id);
 
     if (productIndex === -1) {
-      throw new Error('Produto não encontrado.');
+      throw new AppError('Produto não encontrado.', 404);
     }
 
     const currentProduct = products[productIndex];
 
     if (!currentProduct) {
-      throw new Error('Produto não encontrado.');
+      throw new AppError('Produto não encontrado.', 404);
     }
 
     ProductUtils.validatePartialUpdate(productData);
@@ -55,16 +64,20 @@ export class ProductService {
   }
 
   static deleteProduct(id: number): IProduct {
+    if (Number.isNaN(id)) {
+      throw new AppError('ID inválido.', 400);
+    }
+
     const productIndex = products.findIndex((item) => item.id === id);
 
     if (productIndex === -1) {
-      throw new Error('Produto não encontrado.');
+      throw new AppError('Produto não encontrado.', 404);
     }
 
     const deletedProduct = products.splice(productIndex, 1)[0];
 
     if (!deletedProduct) {
-      throw new Error('Produto não encontrado.');
+      throw new AppError('Produto não encontrado.', 404);
     }
 
     return deletedProduct;
