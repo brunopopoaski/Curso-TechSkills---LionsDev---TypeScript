@@ -1,9 +1,8 @@
 import { type IProduct, type ProductInput, type ProductUpdate } from './types.ts';
-import { products } from "./types.ts";
 import { AppError } from '../errors/app.error.ts';
 
 export class ProductUtils {
-  static nextId(products: IProduct[]): number {
+  nextId(products: IProduct[]): number {
     if (products.length === 0) {
       return 1;
     }
@@ -11,8 +10,7 @@ export class ProductUtils {
     return Math.max(...products.map((product) => product.id)) + 1;
   }
 
-  
-  static validateProduct(product: ProductInput | IProduct): void {
+  validateProduct(product: ProductInput | IProduct): void {
     if (!product.name || product.name.trim().length < 3) {
       throw new AppError('O nome do produto deve ter pelo menos 3 caracteres.', 400);
     }
@@ -34,7 +32,7 @@ export class ProductUtils {
     }
   }
 
-  static validatePartialUpdate(productData: ProductUpdate): void {
+  validatePartialUpdate(productData: ProductUpdate): void {
     if (!productData || Object.keys(productData).length === 0) {
       throw new AppError('Informe ao menos um campo para atualizar.', 400);
     }
@@ -60,5 +58,3 @@ export class ProductUtils {
     }
   }
 }
-
-ProductUtils.nextId(products)

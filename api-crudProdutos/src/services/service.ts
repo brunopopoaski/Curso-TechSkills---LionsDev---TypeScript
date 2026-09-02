@@ -1,18 +1,25 @@
-import { type IProduct, type ProductInput, type ProductUpdate, products } from '../utils/types.ts';
+import { type IProduct, type ProductInput, type ProductUpdate } from '../utils/types.ts';
 import { ProductUtils } from '../utils/productUtils.ts';
+import { ProductRepository } from '../repositories/repository.ts';
 import { AppError } from '../errors/app.error.ts';
 
 export class ProductService {
-  static getAllProducts(): IProduct[] {
-    return products;
+  private readonly productUtils: ProductUtils;
+
+  constructor(private readonly productRepository: ProductRepository) {
+    this.productUtils = new ProductUtils();
   }
 
-  static getProductById(id: number): IProduct {
+  getAllProducts(): IProduct[] {
+    return this.productRepository.getAll();
+  }
+
+  getProductById(id: number): IProduct {
     if (Number.isNaN(id)) {
       throw new AppError('ID inválido.', 400);
     }
 
-    const product = products.find((item) => item.id === id);
+    const product: IProduct | undefined = this.productRepository.findById(id);
 
     if (!product) {
       throw new AppError('Produto não encontrado.', 404);
@@ -21,60 +28,46 @@ export class ProductService {
     return product;
   }
 
-  static createProduct(productData: ProductInput): IProduct {
-    ProductUtils.validateProduct(productData);
+  createProduct(productData: ProductInput): IProduct {
+    this.productUtils.validateProduct(productData);
 
     const newProduct: IProduct = {
-      id: ProductUtils.nextId(products),
+      id: this.productUtils.nextId(this.productRepository.getAll()),
       ...productData,
     };
 
-    products.push(newProduct);
-    return newProduct;
+    return this.productRepository.create(newProduct);
   }
 
-  static updateProduct(id: number, productData: ProductUpdate): IProduct {
+  updateProduct(id: number, productData: ProductUpdate): IProduct {
     if (Number.isNaN(id)) {
       throw new AppError('ID inválido.', 400);
     }
 
-    const productIndex = products.findIndex((item) => item.id === id);
-
-    if (productIndex === -1) {
-      throw new AppError('Produto não encontrado.', 404);
-    }
-
-    const currentProduct = products[productIndex];
+    const currentProduct = this.productRepository.findById(id);
 
     if (!currentProduct) {
       throw new AppError('Produto não encontrado.', 404);
     }
 
-    ProductUtils.validatePartialUpdate(productData);
+    this.productUtils.validatePartialUpdate(productData);
 
     const updatedProduct: IProduct = {
       ...currentProduct,
       ...productData,
     };
 
-    ProductUtils.validateProduct(updatedProduct);
-    products[productIndex] = updatedProduct;
+    this.productUtils.validateProduct(updatedProduct);
 
-    return products[productIndex];
+    return this.productRepository.update(id, updatedProduct);
   }
 
-  static deleteProduct(id: number): IProduct {
+  deleteProduct(id: number): IProduct {
     if (Number.isNaN(id)) {
       throw new AppError('ID inválido.', 400);
     }
 
-    const productIndex = products.findIndex((item) => item.id === id);
-
-    if (productIndex === -1) {
-      throw new AppError('Produto não encontrado.', 404);
-    }
-
-    const deletedProduct = products.splice(productIndex, 1)[0];
+    const deletedProduct = this.productRepository.delete(id);
 
     if (!deletedProduct) {
       throw new AppError('Produto não encontrado.', 404);

@@ -1,49 +1,86 @@
-import { type NextFunction, type Request, type Response } from 'express';
+import { type RequestHandler } from 'express';
 import { ProductService } from '../services/service.ts';
+import type {
+  CreateProductBody,
+  ProductDeleteResponse,
+  ProductIdParams,
+  ProductListResponse,
+  ProductQuery,
+  ProductResponse,
+  ProductUpdateResponse,
+  UpdateProductBody,
+} from '../types/http.types.ts';
 
 export class ProductController {
-  static getAll(req: Request, res: Response, next: NextFunction): void {
+  constructor(private readonly productService: ProductService) {}
+
+  getAll: RequestHandler<
+    Record<string, never>,
+    ProductListResponse,
+    Record<string, never>,
+    ProductQuery
+  > = (req, res, next) => {
     try {
-      const products = ProductService.getAllProducts();
+      const products = this.productService.getAllProducts();
       res.status(200).json(products);
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  static getById(req: Request, res: Response, next: NextFunction): void {
+  getById: RequestHandler<
+    ProductIdParams,
+    ProductResponse,
+    Record<string, never>,
+    Record<string, never>
+  > = (req, res, next) => {
     try {
       const id = Number(req.params.id);
-      const product = ProductService.getProductById(id);
+      const product = this.productService.getProductById(id);
       res.status(200).json(product);
     } catch (error: unknown) {
       next(error);
     }
-  }
+  };
 
-  static create(req: Request, res: Response, next: NextFunction): void {
+  create: RequestHandler<
+    Record<string, never>,
+    ProductResponse,
+    CreateProductBody,
+    Record<string, never>
+  > = (req, res, next) => {
     try {
-      const product = ProductService.createProduct(req.body);
+      const product = this.productService.createProduct(req.body);
       res.status(201).json(product);
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  static update(req: Request, res: Response, next: NextFunction): void {
+  update: RequestHandler<
+    ProductIdParams,
+    ProductUpdateResponse,
+    UpdateProductBody,
+    Record<string, never>
+  > = (req, res, next) => {
     try {
       const id = Number(req.params.id);
-      const product = ProductService.updateProduct(id, req.body);
+      const product = this.productService.updateProduct(id, req.body);
       res.status(200).json(product);
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  static delete(req: Request, res: Response, next: NextFunction): void {
+  delete: RequestHandler<
+    ProductIdParams,
+    ProductDeleteResponse,
+    Record<string, never>,
+    Record<string, never>
+  > = (req, res, next) => {
     try {
       const id = Number(req.params.id);
-      const product = ProductService.deleteProduct(id);
+      const product = this.productService.deleteProduct(id);
       res.status(200).json({
         message: 'Produto deletado com sucesso.',
         product,
@@ -51,5 +88,5 @@ export class ProductController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }
