@@ -1,0 +1,17 @@
+{
+  "name": "aula-debug",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Projeto mínimo para executar o arquivo TypeScript da aulaDebug.",
+  "main": "ex03.ts",
+  "scripts": {
+    "start": "ts-node ex03.ts",
+    "build": "tsc --project tsconfig.json --noEmit"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^22.18.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
