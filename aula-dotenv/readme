@@ -1,0 +1,26 @@
+ex 01
+
+Sintoma:
+Comando executado: npx ts-node app.ts
+Resultado esperado: 
+Resultado obtido (valor e tipo da variável lida):
+Hipótese:
+Como foi investigado:
+Causa encontrada: /home/bruno-dev/Área de trabalho/cursoTs/Curso-TechSkills---LionsDev---TypeScript/aula-dotenv/node_modules/ts-node/dist/configuration.js:91
+    const { fileExists = ts.sys.fileExists, readFile = ts.sys.readFile, skipProject = index_1.DEFAULTS.skipProject, project = index_1.DEFAULTS.project, tsTrace = index_1.DEFAULTS.tsTrace, } = rawApiOptions;
+                                ^
+
+TypeError: Cannot read properties of undefined (reading 'fileExists')
+    at readConfig (/home/bruno-dev/Área de trabalho/cursoTs/Curso-TechSkills---LionsDev---TypeScript/aula-dotenv/node_modules/ts-node/dist/configuration.js:91:33)
+    at findAndReadConfig (/home/bruno-dev/Área de trabalho/cursoTs/Curso-TechSkills---LionsDev---TypeScript/aula-dotenv/node_modules/ts-node/dist/configuration.js:50:84)
+    at phase3 (/home/bruno-dev/Área de trabalho/cursoTs/Curso-TechSkills---LionsDev---TypeScript/aula-dotenv/node_modules/ts-node/dist/bin.js:254:67)
+    at bootstrap (/home/bruno-dev/Área de trabalho/cursoTs/Curso-TechSkills---LionsDev---TypeScript/aula-dotenv/node_modules/ts-node/dist/bin.js:47:30)
+    at main (/home/bruno-dev/Área de trabalho/cursoTs/Curso-TechSkills---LionsDev---TypeScript/aula-dotenv/node_modules/ts-node/dist/bin.js:33:12)
+    at Object.<anonymous> (/home/bruno-dev/Área de trabalho/cursoTs/Curso-TechSkills---LionsDev---TypeScript/aula-dotenv/node_modules/ts-node/dist/bin.js:579:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Module._load (node:internal/modules/cjs/loader:1263:12)
+
+Node.js v22.22.1
+Como a correção foi validada:   
