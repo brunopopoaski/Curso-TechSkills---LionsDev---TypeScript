@@ -1,7 +1,5 @@
 import express from 'express';
-import app from '../app';
-
-const router = app
+const router = express.Router();
 
 router.get('/somar', (req, res) => {
     const { a, b } = req.body;

@@ -84,4 +84,10 @@ describe('calcularFrete function', () => {
     // Assert
     expect(calculation).toThrow('CEP inválido');
   });
+
+  it('should throw when the weight is invalid', () => {
+    const calculation = () => calcularFrete('01001000', 0);
+
+    expect(calculation).toThrow('Peso inválido');
+  });
 });

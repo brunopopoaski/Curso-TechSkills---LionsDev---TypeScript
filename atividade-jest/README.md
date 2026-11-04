@@ -68,3 +68,40 @@ PASS src/shipping.spec.ts
 Test Suites: 4 passed, 4 total
 Tests: 15 passed, 15 total
 ```
+
+## Atividade pratica: erros, estrutura, integracao, mocks e cobertura
+
+### Exercicio 4
+
+- O `expect` recebe uma funcao para que o Jest execute o codigo durante a captura da excecao. Se a chamada fosse feita antes do `expect`, o erro interromperia o teste.
+- Quando a funcao nao lancar erro, `toThrow` falha porque nenhuma excecao foi produzida.
+- Verificar a mensagem e mais seguro porque confirma que o codigo falhou pelo motivo esperado, e nao por outro erro inesperado.
+- `not.toThrow()` deve ser usado para garantir que uma operacao valida termina sem excecao.
+
+### Exercicio 5
+
+Estrutura escolhida: pasta `src/__tests__` com arquivos `.spec.ts`. Em um projeto maior, essa convencao separa claramente as especificacoes da implementacao. Os testes cobrem `divide` e `formatador`.
+
+### Exercicio 6
+
+- Esse teste e de integracao porque verifica a aplicacao Express, o roteamento HTTP, a serializacao JSON e as respostas.
+- Colocar `app.listen()` dentro de `app.ts` faria a porta ser aberta ao importar o modulo. Isso poderia causar conflitos e impedir o uso direto da aplicacao pelo Supertest.
+- `toEqual` compara o objeto JSON recebido em profundidade; `toBe` compara identidade/referencia, o que nao e adequado para objetos.
+
+### Exercicio 7
+
+- Verificar o retorno confirma a regra de negocio; verificar a chamada confirma a colaboracao com a dependencia.
+- O servico recebe o repositorio para aplicar injecao de dependencia, permitindo substituir a implementacao real por um mock.
+- Um mock valida a interacao e o resultado isolado, mas nao garante que o banco, o driver ou o contrato real do sistema funcionam corretamente. Isso exige testes de integracao.
+
+### Exercicio 8
+
+Cobertura antes da conclusao dos testes: 97,82% de instrucoes, 94,44% de ramos, 100% de funcoes e 97,82% de linhas. As lacunas estavam principalmente em caminhos de validacao ainda nao exercitados. A nova verificacao de peso invalido completa mais esse ramo.
+
+100% de cobertura nao prova que o codigo esta correto, pois os testes podem executar linhas sem verificar o comportamento adequado ou deixar de cobrir combinacoes relevantes.
+
+Cobertura nao aponta problemas semanticos, como uma regra implementada incorretamente mas exercitada por um teste igualmente incorreto.
+
+Arquivos de inicializacao ou configuracao podem ser excluidos quando nao possuem logica de negocio. Neste projeto, exclusao de `server.ts` seria apropriada caso ele apenas iniciasse o servidor.
+
+O piso global escolhido foi 80% para instrucoes, 70% para ramos, 80% para funcoes e 80% para linhas. Os valores sao suficientes para exigir protecao ampla sem transformar casos de inicializacao ou detalhes de infraestrutura em requisito artificial.
